@@ -12,14 +12,31 @@ public class Blackjack {
         for (String suit : suits) {
             for (String value : values) {
                 String card = value + " of " + suit;
-                deck.add(card); // inside inner loop
+                deck.add(card); 
             }
         }
-        return deck; // inside method, outside loops
+        return deck; 
     }
 
     public static void shuffleDeck(ArrayList<String> deck) {
         Collections.shuffle(deck);
+    }
+
+    public static void playAgain(String playerName){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Would you like to play again?");
+        System.out.print("Type y or n: ");
+        String decision = scanner.nextLine().toLowerCase();
+        if (decision.equals("y")){
+            main(null);
+        }
+        else if (decision.equals("n")){
+            System.out.println("Play again sometime, " + playerName + "!");
+        }
+        else{
+            System.out.println("Invalid decision");
+        }
+        scanner.close();
     }
 
     public static void dealCard(ArrayList<String> deck, ArrayList<String> hand){
@@ -55,6 +72,10 @@ public class Blackjack {
     }
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your name: ");
+        String playerName = scanner.nextLine();
+
         ArrayList<String> gameDeck = createDeck();
         shuffleDeck(gameDeck);
 
@@ -65,11 +86,9 @@ public class Blackjack {
         dealCard(gameDeck, playerHand);
         dealCard(gameDeck, dealerHand);
         dealCard(gameDeck, dealerHand);
-
         displayHand(playerHand, "Player");
         displayHand(dealerHand, "Dealer");
 
-        Scanner scanner = new Scanner(System.in);
 
         while (true) {
             System.out.print("Type h or s: ");
@@ -81,6 +100,7 @@ public class Blackjack {
             int total = calculateHand(playerHand);
                 if (total > 21) {
                     System.out.println("Bust! You lose...");
+                    playAgain(playerName);
                     scanner.close();
                     return;
                 }
@@ -102,16 +122,20 @@ public class Blackjack {
 
     if (calculateHand(dealerHand) > 21){
         System.out.println("Dealer busts! You win!");
+        playAgain(playerName);
     }
     else{
         if (calculateHand(playerHand) > calculateHand(dealerHand)){
             System.out.println("You win!");
+            playAgain(playerName);
         }
        else if (calculateHand(dealerHand) > calculateHand(playerHand)){
             System.out.println("You lose..");
+            playAgain(playerName);
         }
         else{
             System.out.println("It's a tie!");
+            playAgain(playerName);
         }
     }
         scanner.close();
